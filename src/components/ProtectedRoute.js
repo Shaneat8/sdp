@@ -18,15 +18,16 @@ function ProtectedRoute({ children }) {
         </h2>
         {user && (
           <div className="flex gap-3 items-center">
-            <div className="flex gap-1 item-center cursor-pointer">
+            <div className="flex gap-1 item-center cursor-pointer"
+            onClick={() => {
+              if (user.role === "admin") {
+                nav("/admin");
+              } else nav("/profile");
+            }}>
               <i className="ri-shield-user-fill"></i>
               <h4
                 className="uppercase cursor-pointer underline"
-                onClick={() => {
-                  if (user.role === "admin") {
-                    nav("/admin");
-                  } else nav("/profile");
-                }}
+
               >
                 {user.name}
               </h4>
