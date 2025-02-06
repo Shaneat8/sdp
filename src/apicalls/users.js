@@ -7,8 +7,11 @@ import {
   getDoc,
   getDocs,
   query,
+  setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
+import { message } from "antd";
 
 export const CreateUser = async (payload) => {
   try {
@@ -90,6 +93,124 @@ export const getUserById = async (id) => {
         ...user.data(),
         id: user.id,
       },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const AddUserData = async (payload) => {
+  try {
+    await setDoc(
+      doc(firestoreDatabase, "userDetails", payload.userId),
+      payload
+    );
+    //adding details filled
+    await updateDoc(doc(firestoreDatabase, "users", payload.userId), {
+      detailsAdded: true,
+    });
+    return {
+      success: true,
+      message: "Users Details Added created successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const UpdateUserData = async (payload) => {
+  try {
+    await setDoc(doc(firestoreDatabase, "userDetails", payload.id), payload);
+    return {
+      success: true,
+      message: "User Data updated successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const CheckIfDetailsAlreadyFilled = async (id) => {
+  try {
+    const user = await getDocs(
+      query(
+        collection(firestoreDatabase, "userDetails"),
+        where("userId", "==", id)
+      )
+    );
+
+    if (user.size > 0) {
+      return {
+        success: true,
+        message: "User has already filled details",
+        data: user.docs.map((doc) => {
+          return {
+            ...doc.data(),
+            id: doc.id,
+          };
+        })[0],
+      };
+    } else {
+      return {
+        success: false,
+        message: "User Details not Filled",
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const GetPatientDetails = async (patientId) => {
+  try {
+    const user = await getDocs(
+      query(
+        collection(firestoreDatabase, "userDetails"),
+        where("userId", "==", patientId)
+      )
+    );
+    if (user.size > 0) {
+      return {
+        success: true,
+        message: "User details found",
+        data: user.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }))[0], // Fetch only the first matching record
+      };
+    } else {
+      return {
+        success: false,
+        message: "User details not found",
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error.message,
+    };
+  }
+};
+
+export const AddMedicineDiagnosis = async (payload) => {
+  try {
+    const prescriptionsRef = collection(firestoreDatabase, "prescriptions");
+    await addDoc(prescriptionsRef, payload);
+    return {
+      success: true,
+      message: "Prescription added successfully!",
     };
   } catch (error) {
     return {

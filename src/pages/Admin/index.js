@@ -5,6 +5,7 @@ import DoctorsList from "./DoctorsList";
 import { useDispatch } from "react-redux";
 import { ShowLoader } from "../../redux/loaderSlice";
 import { getUserById } from "../../apicalls/users";
+import Medicine from "./Medicine";
 
 function Admin() {
   const [isAdmin, setIsAdmin] = React.useState(false);
@@ -38,6 +39,9 @@ function Admin() {
           </Tabs.TabPane>
           <Tabs.TabPane tab="Doctors" key="2">
             <DoctorsList />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Medicine" key="3">
+            <Medicine/>
           </Tabs.TabPane>
         </Tabs>
       </div>

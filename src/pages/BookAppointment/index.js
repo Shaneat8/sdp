@@ -38,7 +38,8 @@ function BookAppointment() {
     }
     return slots.map((slot) => {
       const isBooked = bookedSlots?.find(
-        (bookedSlots) => bookedSlots.slot === slot && bookedSlots.status !== 'Cancelled'
+        (bookedSlots) =>
+          bookedSlots.slot === slot && bookedSlots.status !== "Cancelled"
       );
       return (
         <div
@@ -82,6 +83,12 @@ function BookAppointment() {
     }
   };
   const onBookAppointment = async () => {
+    if (!problem.trim()) {
+      message.error(
+        "Please enter your problem before booking the appointment."
+      );
+      return;
+    }
     try {
       dispatch(ShowLoader(true));
       const payload = {
@@ -189,6 +196,7 @@ function BookAppointment() {
                 placeholder="Enter Your problem here"
                 value={problem}
                 onChange={(e) => setProblem(e.target.value)}
+                required
               ></textarea>
               <div className="my-3 flex gap-2 justify-center items-center w-400 ">
                 <button

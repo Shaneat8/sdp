@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import Doctor from "./pages/DoctorForm";
 import Admin from "./pages/Admin";
 import BookAppointment from "./pages/BookAppointment";
+import UserForm from "./pages/UserForm";
+import Patient from "./pages/DoctorForm/patient";
 function App() {
   const {loading} = useSelector(state=>state.loader);
   return (
@@ -22,7 +24,9 @@ function App() {
           <Route path="/book-appointment/:id" element={<ProtectedRoute><BookAppointment/></ProtectedRoute>}/>
           <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
           <Route path="/apply-doc" element={<ProtectedRoute><Doctor/></ProtectedRoute>}/>
+          <Route path="/user-details" element={<ProtectedRoute><UserForm/></ProtectedRoute>}/>
           <Route path="/admin" element={<ProtectedRoute><Admin/></ProtectedRoute>}/>
+          <Route path="/patient/:patientId" element={<ProtectedRoute><Patient/></ProtectedRoute>}/>
         </Routes>
       </BrowserRouter>
 

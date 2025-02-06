@@ -3,23 +3,25 @@ import { CreateUser } from "../../apicalls/users";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {ShowLoader} from "../../redux/loaderSlice";
+import { ShowLoader } from "../../redux/loaderSlice";
+import moment from "moment";
 
 function Register() {
-  const nav =useNavigate();
-  const dispatch=useDispatch();
+  const nav = useNavigate();
+  const dispatch = useDispatch();
   const onFinish = async (values) => {
     // console.log(values);
     try {
       dispatch(ShowLoader(true));
       const response = await CreateUser({
         ...values,
-        role:"user",
+        role: "user",
+        created: moment().format("DD-MM-YYYY hh:mm A"),
       });
-      dispatch(ShowLoader(false))
+      dispatch(ShowLoader(false));
       if (response.success) {
         message.success(response.message);
-        nav('/login');
+        nav("/login");
       } else {
         throw new Error(response.message);
       }
@@ -27,15 +29,14 @@ function Register() {
       dispatch(ShowLoader(false));
       message.error(error.message);
     }
-
   };
 
-  useEffect(()=>{
-    const user=JSON.parse(localStorage.getItem('user'));
-    if(user){
-      nav('/');
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      nav("/");
     }
-  },[nav])
+  }, [nav]);
   return (
     <div className="flex justify-center items-center h-screen">
       <Form
@@ -55,22 +56,24 @@ function Register() {
         >
           <Input type="text" />
         </Form.Item>
-        <Form.Item label="Email" name="email"
-        rules={[{required:true,message:"Please enter a valid email"}]}>
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[{ required: true, message: "Please enter a valid email" }]}
+        >
           <Input type="email" />
         </Form.Item>
         <Form.Item
           label="Password"
           name="password"
-          
-          rules={[{ required: true, message: "Pls enter password!" }]}
+          rules={[{ required: true, message: "Please enter password!" }]}
         >
           <Input.Password placeholder="Enter password" />
         </Form.Item>
         <button className="contained-button my-1 " type="submit">
           Register
         </button>
-       
+
         <Link className="underline" to="/login">
           Already have an account ? <strong>Sign In</strong>
         </Link>

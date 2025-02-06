@@ -9,7 +9,6 @@ import {
   where,
 } from "firebase/firestore";
 import firestoreDatabase from "../firebaseConfig";
-import { message } from "antd";
 export const AddDoctor = async (payload) => {
   try {
     await setDoc(doc(firestoreDatabase, "doctors", payload.userId), payload);
@@ -19,7 +18,7 @@ export const AddDoctor = async (payload) => {
     });
     return {
       success: true,
-      message: "Doctor added succesfully ,please wait for approval",
+      message: "Doctor added successfully ,please wait for approval",
     };
   } catch (error) {
     return {
