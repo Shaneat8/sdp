@@ -14,7 +14,7 @@ export const AddDoctor = async (payload) => {
     await setDoc(doc(firestoreDatabase, "doctors", payload.userId), payload);
     //update user role
     await updateDoc(doc(firestoreDatabase, "users", payload.userId), {
-      role: "doctor",
+      role: "doctor(provisional)",
     });
     return {
       success: true,
@@ -82,6 +82,18 @@ export const getAllDoctor = async () => {
 export const UpdateDoctor = async (payload) => {
   try {
     await setDoc(doc(firestoreDatabase, "doctors", payload.id), payload);
+
+    // Handle role changes based on status
+    if (payload.status === "approved") {
+      await updateDoc(doc(firestoreDatabase, "users", payload.userId), {
+        role: "doctor",
+      });
+    } else if (payload.status === "blocked") {
+      await updateDoc(doc(firestoreDatabase, "users", payload.userId), {
+        role: "doctor(provisional)",
+      });
+    }
+
     return {
       success: true,
       message: "Doctor updated successfully",
@@ -93,6 +105,7 @@ export const UpdateDoctor = async (payload) => {
     };
   }
 };
+
 
 export const GetDoctorById = async (id) => {
   try {

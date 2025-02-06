@@ -17,7 +17,11 @@ function Home() {
       dispatch(ShowLoader(true));
       const response = await getAllDoctor();
       if (response.success) {
-        setDoctors(response.data);
+        // Only show approved doctors
+        const approvedDoctors = response.data.filter(
+          (doctor) => doctor.status === "approved"
+        );
+        setDoctors(approvedDoctors);
       } else {
         message.error(response.message);
       }
@@ -27,6 +31,7 @@ function Home() {
       dispatch(ShowLoader(false));
     }
   };
+  
   useEffect(() => {
     getData();
   }, []);
